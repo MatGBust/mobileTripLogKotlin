@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivMapViewIcon"
+        android:layout_width="0dp"
+        android:layout_height="165dp"
+        android:layout_marginStart="125dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="125dp"
+        android:src="@drawable/map"
+        app:layout_constraintBottom_toTopOf="@+id/tvMapViewLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+
+    <ImageView
+        android:id="@+id/ivListIcon"
+        android:layout_width="143dp"
+        android:layout_height="145dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/notepad"
+        app:layout_constraintEnd_toEndOf="@+id/tvListViewLabel"
+        app:layout_constraintStart_toStartOf="@+id/tvListViewLabel"
+        app:layout_constraintTop_toBottomOf="@+id/tvMapViewLabel" />
+
+    <TextView
+        android:id="@+id/tvListViewLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="List View"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/ivMapViewIcon"
+        app:layout_constraintStart_toStartOf="@+id/ivMapViewIcon"
+        app:layout_constraintTop_toBottomOf="@+id/ivListIcon" />
+
+    <TextView
+        android:id="@+id/tvMapViewLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map View"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/tvViewSelectorTitle"
+        app:layout_constraintStart_toStartOf="@+id/tvViewSelectorTitle"
+        app:layout_constraintTop_toBottomOf="@+id/ivMapViewIcon" />
+
+    <TextView
+        android:id="@+id/tvViewSelectorTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Select a View!"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
