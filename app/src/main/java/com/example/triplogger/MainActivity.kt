@@ -2,45 +2,27 @@ package com.example.triplogger
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.View.OnClickListener
-import android.widget.ImageView
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.triplogger.ui.theme.TripLoggerTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.triplogger.fragments.ViewIconFragment
+import androidx.fragment.app.commit
 
 private const val TAG = "MainActivity"
-class MainActivity : ComponentActivity() {
-    private lateinit var ivMapViewIcon : ImageView
-    private  lateinit var  ivListViewIcon : ImageView
-
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.i(TAG, "onCreate entered")
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
-        ivMapViewIcon = findViewById(R.id.ivMapViewIcon)
-        ivListViewIcon = findViewById(R.id.ivListIcon)
-        ivMapViewIcon.setOnClickListener(object : OnClickListener {
-            override fun onClick(p0: View?) {
-                Log.i(TAG, "ivMapViewIcon clicked ")
-            }
-        })
-        ivListViewIcon.setOnClickListener(object : OnClickListener {
-            override fun onClick(p0: View?) {
-                Log.i(TAG, "ivListViewIcon clicked ")
-            }
-        })
-
-
+        loadFragment(R.id.fragment_map_container, ViewIconFragment.newInstance(R.drawable.map, "Map View"))
+        loadFragment(R.id.fragment_list_container, ViewIconFragment.newInstance(R.drawable.notepad, "List View"))
+    }
+    private fun loadFragment(containerId: Int, fragment: Fragment) {
+        supportFragmentManager.commit {
+            replace(containerId, fragment)
+            addToBackStack(null) // May want to delete later so user can't return to previous fragment
+        }
     }
 }
 
