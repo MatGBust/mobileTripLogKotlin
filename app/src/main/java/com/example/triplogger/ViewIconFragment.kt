@@ -1,5 +1,6 @@
 package com.example.triplogger.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.triplogger.ListViewActivity
+import com.example.triplogger.MapViewActivity
 import com.example.triplogger.R
 
 private const val TAG = "ViewIconFragment"
@@ -37,9 +40,25 @@ class ViewIconFragment : Fragment() {
         ivViewIcon.setImageResource(imageResourceId)
         tvViewLabel.text = labelText
         ivViewIcon.setOnClickListener {
-            Log.i("ViewFragment", "$labelText Image clicked!")
+            Log.i(TAG, "$labelText Image clicked!")
+            openViewActivity()
+        }
+        tvViewLabel.setOnClickListener {
+            Log.i(TAG, "$labelText Text clicked!")
+            openViewActivity()
         }
         return view
+    }
+
+    private fun openViewActivity() {
+        val context = requireContext()
+        val activityClass = when(labelText){
+            getString(R.string.list_view) -> ListViewActivity::class.java
+            else -> MapViewActivity::class.java
+
+        }
+        val intent = Intent(context, activityClass)
+        context.startActivity(intent)
     }
 
     companion object {

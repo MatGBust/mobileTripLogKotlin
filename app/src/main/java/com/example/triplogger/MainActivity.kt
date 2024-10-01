@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        loadFragment(R.id.fragment_map_container, ViewIconFragment.newInstance(R.drawable.map, "Map View"))
-        loadFragment(R.id.fragment_list_container, ViewIconFragment.newInstance(R.drawable.notepad, "List View"))
+        loadFragment(R.id.fragment_map_container, ViewIconFragment.newInstance(R.drawable.map, getString(R.string.map_view)))
+        loadFragment(R.id.fragment_list_container, ViewIconFragment.newInstance(R.drawable.notepad,  getString(R.string.list_view)))
     }
     private fun loadFragment(containerId: Int, fragment: Fragment) {
         supportFragmentManager.commit {

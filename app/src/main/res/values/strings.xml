@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">tripLogger</string>
+    <string name="map_view">Map View</string>
+    <string name="list_view">List View</string>
 </resources>
