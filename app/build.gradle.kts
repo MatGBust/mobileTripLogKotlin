@@ -1,3 +1,13 @@
+import java.util.Properties
+
+// Load secrets.properties file
+val secretPropertiesFile = rootProject.file("secrets.properties")
+val secretProperties = Properties()
+
+if (secretPropertiesFile.exists()) {
+    secretProperties.load(secretPropertiesFile.inputStream())
+}
+
 buildscript {
     dependencies {
         classpath(libs.secrets.gradle.plugin)
@@ -9,22 +19,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.secrets.gradle)
 }
-secrets {
-    // To add your Maps API key to this project:
-    // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
-    // 2. Add this line, where YOUR_API_KEY is your API key:
-    //        MAPS_API_KEY=YOUR_API_KEY
-    propertiesFileName = "secrets.properties"
 
-    // A properties file containing default secret values. This file can be
-    // checked in version control.
-    defaultPropertiesFileName = "local.defaults.properties"
-
-    // Configure which keys should be ignored by the plugin by providing regular expressions.
-    // "sdk.dir" is ignored by default.
-    ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
-    ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
-}
 
 android {
     namespace = "com.example.triplogger"
@@ -36,6 +31,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["MAP_API_KEY"] = secretProperties["MAP_API_KEY"] as String
+
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
