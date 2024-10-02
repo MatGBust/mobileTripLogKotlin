@@ -2,5 +2,4 @@
     <string name="app_name">tripLogger</string>
     <string name="map_view">Map View</string>
     <string name="list_view">List View</string>
-    <string name="my_map_api_key">AIzaSyBiWSYw9YP1U4t0f7sENsnbPIA51F9g11Y</string>
 </resources>
