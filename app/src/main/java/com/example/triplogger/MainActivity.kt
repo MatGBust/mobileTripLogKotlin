@@ -15,9 +15,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        loadFragment(R.id.fragment_map_container, ViewIconFragment.newInstance(R.drawable.map, getString(R.string.map_view)))
-        loadFragment(R.id.fragment_list_container, ViewIconFragment.newInstance(R.drawable.notepad,  getString(R.string.list_view)))
+        val mapIconView =  ViewIconFragment.newInstance(R.drawable.map, getString(R.string.map_view))
+        val listIconView = ViewIconFragment.newInstance(R.drawable.notepad,  getString(R.string.list_view))
+        loadFragment(R.id.fragment_map_container, mapIconView)
+        loadFragment(R.id.fragment_list_container, listIconView)
     }
+
+    override fun onPause() {
+        Log.i(TAG, "onPause entered")
+        super.onPause()
+    }
+
+    override fun onResume() {
+        Log.i(TAG, "onResume entered")
+        super.onResume()
+    }
+
+    override fun onStop() {
+        Log.i(TAG, "onStop entered")
+        super.onStop()
+    }
+
     private fun loadFragment(containerId: Int, fragment: Fragment) {
         supportFragmentManager.commit {
             replace(containerId, fragment)
