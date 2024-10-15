@@ -12,4 +12,7 @@ interface VacationDao {
 
     @Query("SELECT * FROM vacation_table ORDER BY title ASC")
     fun getAllVacations(): LiveData<List<Vacation>>
+
+    @Delete
+    suspend fun deleteVacation(vacation: Vacation)
 }

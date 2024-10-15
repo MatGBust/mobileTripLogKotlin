@@ -12,4 +12,8 @@ class VacationRepository(private val vacationDao: VacationDao) {
         vacationDao.addVacation(vacation)
     }
 
+    suspend fun deleteVacation(vacation: Vacation){
+        vacationDao.deleteVacation(vacation)
+    }
+
 }

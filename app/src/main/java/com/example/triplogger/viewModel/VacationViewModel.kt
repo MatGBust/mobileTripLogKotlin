@@ -28,4 +28,10 @@ class VacationViewModel(application: Application) : AndroidViewModel(application
             repository.addVacation(vacation)
         }
     }
+
+    fun deleteVacation(vacation: Vacation){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteVacation(vacation) // Call delete method in the repository
+        }
+    }
 }
