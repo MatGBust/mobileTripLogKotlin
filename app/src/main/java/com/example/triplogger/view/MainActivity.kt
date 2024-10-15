@@ -1,14 +1,14 @@
-package com.example.triplogger
+package com.example.triplogger.view
 
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.triplogger.fragments.ViewIconFragment
 import androidx.fragment.app.commit
-
+import com.example.triplogger.R
 private const val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG, "onCreate entered")

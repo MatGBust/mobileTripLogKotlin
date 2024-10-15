@@ -14,7 +14,7 @@
         android:theme="@style/Theme.TripLogger"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.TripLogger">
@@ -23,8 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListViewActivity"></activity>
-        <activity android:name=".MapViewActivity"></activity>
+        <activity android:name=".view.ListViewActivity"></activity>
+        <activity android:name=".view.MapViewActivity"></activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAP_API_KEY}" />

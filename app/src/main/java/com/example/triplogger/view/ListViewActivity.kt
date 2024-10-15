@@ -1,12 +1,15 @@
-package com.example.triplogger
+package com.example.triplogger.view
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.triplogger.R
+import com.example.triplogger.model.Vacation
 
 private const val TAG = "ListViewActivity"
+
 class ListViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG, "onCreate entered")

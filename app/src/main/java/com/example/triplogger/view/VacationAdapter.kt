@@ -1,10 +1,12 @@
-package com.example.triplogger
+package com.example.triplogger.view
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.triplogger.R
+import com.example.triplogger.model.Vacation
 
 class VacationAdapter(private val vacationList: List<Vacation>) : RecyclerView.Adapter<VacationAdapter.VacationViewHolder>() {
 
