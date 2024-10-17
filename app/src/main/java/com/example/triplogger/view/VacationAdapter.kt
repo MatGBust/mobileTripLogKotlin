@@ -1,5 +1,6 @@
 package com.example.triplogger.view
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
         val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
         val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         val deleteButton: Button = itemView.findViewById(R.id.buttonDelete)
+        val updateButton: Button = itemView.findViewById(R.id.buttonUpdate)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacationViewHolder {
@@ -38,6 +40,13 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
             vacationViewModel.deleteVacation(vacation) // Call the delete method from ViewModel
             vacationList.removeAt(position) // Remove from the adapter's list
             notifyItemRemoved(position) // Notify RecyclerView of the item removal
+        }
+
+        holder.updateButton.setOnClickListener {
+            // Start a new activity or show a dialog to update the vacation
+            val intent = Intent(holder.itemView.context, UpdateVacationActivity::class.java)
+            intent.putExtra("VACATION_TITLE", vacation.title)
+            holder.itemView.context.startActivity(intent)
         }
     }
 
