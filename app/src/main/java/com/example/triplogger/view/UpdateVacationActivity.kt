@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 
 class UpdateVacationActivity : AppCompatActivity() {
 
-    // Use viewModels() to initialize the ViewModel
     private val vacationViewModel: VacationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

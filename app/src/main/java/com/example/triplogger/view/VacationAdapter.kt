@@ -43,7 +43,6 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
         }
 
         holder.updateButton.setOnClickListener {
-            // Start a new activity or show a dialog to update the vacation
             val intent = Intent(holder.itemView.context, UpdateVacationActivity::class.java)
             intent.putExtra("VACATION_TITLE", vacation.title)
             holder.itemView.context.startActivity(intent)
