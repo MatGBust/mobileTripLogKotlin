@@ -15,4 +15,7 @@ interface VacationDao {
 
     @Delete
     suspend fun deleteVacation(vacation: Vacation)
+
+    @Update
+    suspend fun updateVacation(vacation: Vacation)
 }
