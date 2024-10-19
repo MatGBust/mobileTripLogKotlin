@@ -12,16 +12,28 @@
         android:hint="Vacation Title" />
 
     <EditText
-        android:id="@+id/editTextLocation"
+        android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="Vacation Location" />
+        android:hint="Vacation Description" />
 
     <EditText
         android:id="@+id/editTextDate"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:hint="Vacation Date" />
+
+    <EditText
+        android:id="@+id/editTextLocation"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Vacation Location" />
+
+    <EditText
+        android:id="@+id/editTextNotes"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Vacation Notes" />
 
     <Button
         android:id="@+id/buttonAddVacation"

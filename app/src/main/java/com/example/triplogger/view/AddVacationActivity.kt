@@ -19,17 +19,23 @@ class AddVacationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_vacation)
 
         val editTextTitle = findViewById<EditText>(R.id.editTextTitle)
-        val editTextLocation = findViewById<EditText>(R.id.editTextLocation)
+        val editTextDescription = findViewById<EditText>(R.id.editTextDescription)
         val editTextDate = findViewById<EditText>(R.id.editTextDate)
+        val editTextLocation = findViewById<EditText>(R.id.editTextLocation)
+        val editTextNotes = findViewById<EditText>(R.id.editTextNotes)
+
         val buttonAddVacation = findViewById<Button>(R.id.buttonAddVacation)
 
         buttonAddVacation.setOnClickListener {
-            val title = editTextTitle.text.toString()
-            val location = editTextLocation.text.toString()
-            val date = editTextDate.text.toString()
+            val titleTxt = editTextTitle.text.toString()
+            val descriptionTxt = editTextDescription.text.toString()
+            val dateTxt = editTextDate.text.toString()
+            val locationTxt = editTextLocation.text.toString()
+            val notesTxt = editTextNotes.text.toString()
 
-            if (title.isNotBlank() && location.isNotBlank() && date.isNotBlank()) {
-                val newVacation = Vacation(title, location, date)
+
+            if (titleTxt.isNotBlank() && locationTxt.isNotBlank() && dateTxt.isNotBlank()) {
+                val newVacation = Vacation(title = titleTxt, description = descriptionTxt, date =  dateTxt, location =  locationTxt, notes = notesTxt )
                 vacationViewModel.addVacation(newVacation)
                 finish() // Close the activity after adding the vacation
             } else {
