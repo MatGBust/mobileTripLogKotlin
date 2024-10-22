@@ -18,26 +18,35 @@ class UpdateVacationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_vacation)
 
+        val vacationTripId = intent.getIntExtra("VACATION_TRIP_ID", -1)
         val vacationTitle = intent.getStringExtra("VACATION_TITLE")
+        val vacationDescription = intent.getStringExtra("VACATION_DESCRIPTION")
+        val vacationLocation = intent.getStringExtra("VACATION_LOCATION")
+        val vacationDate = intent.getStringExtra("VACATION_DATE")
+        val vacationNotes = intent.getStringExtra("VACATION_NOTES")
+
+        val titleEditText = findViewById<EditText>(R.id.titleEditText)
+        val descriptionEditText = findViewById<EditText>(R.id.descriptionEditText)
         val locationEditText = findViewById<EditText>(R.id.locationEditText)
         val dateEditText = findViewById<EditText>(R.id.dateEditText)
+        val notesEditText = findViewById<EditText>(R.id.notesEditText)
         val updateButton = findViewById<Button>(R.id.buttonUpdateVacation)
 
-        // Load the current details and display them in EditTexts
-        vacationViewModel.allVacations.observe(this, Observer { vacations ->
-            val vacation = vacations.find { it.title == vacationTitle }
-            vacation?.let {
-                locationEditText.setText(it.location)
-                dateEditText.setText(it.date)
-            }
-        })
+        // Set the current vacation details into the EditTexts
+        titleEditText.setText(vacationTitle)
+        descriptionEditText.setText(vacationDescription)
+        locationEditText.setText(vacationLocation)
+        dateEditText.setText(vacationDate)
+        notesEditText.setText(vacationNotes)
 
-        // Handle update button click
         updateButton.setOnClickListener {
             val updatedVacation = Vacation(
-                title = vacationTitle ?: "",
+                tripId = vacationTripId,
+                title = titleEditText.text.toString(),
+                description = descriptionEditText.text.toString(),
                 location = locationEditText.text.toString(),
-                date = dateEditText.text.toString()
+                date = dateEditText.text.toString(),
+                notes = notesEditText.text.toString()
             )
             vacationViewModel.updateVacation(updatedVacation)
             finish() // Close the activity
