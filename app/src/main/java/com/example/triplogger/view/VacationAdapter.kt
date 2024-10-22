@@ -49,7 +49,7 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
 
         holder.updateButton.setOnClickListener {
             val intent = Intent(holder.itemView.context, UpdateVacationActivity::class.java).apply {
-                putExtra("VACATION_TRIP_ID", vacation.tripId) // Pass tripId
+                putExtra("VACATION_TRIP_ID", vacation.tripId)
                 putExtra("VACATION_TITLE", vacation.title)
                 putExtra("VACATION_DESCRIPTION", vacation.description)
                 putExtra("VACATION_LOCATION", vacation.location)

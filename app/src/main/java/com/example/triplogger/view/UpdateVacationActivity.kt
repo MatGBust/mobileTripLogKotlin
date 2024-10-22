@@ -18,7 +18,7 @@ class UpdateVacationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_vacation)
 
-        val vacationTripId = intent.getIntExtra("VACATION_TRIP_ID", -1) // Get tripId
+        val vacationTripId = intent.getIntExtra("VACATION_TRIP_ID", -1)
         val vacationTitle = intent.getStringExtra("VACATION_TITLE")
         val vacationDescription = intent.getStringExtra("VACATION_DESCRIPTION")
         val vacationLocation = intent.getStringExtra("VACATION_LOCATION")
@@ -41,7 +41,7 @@ class UpdateVacationActivity : AppCompatActivity() {
 
         updateButton.setOnClickListener {
             val updatedVacation = Vacation(
-                tripId = vacationTripId, // Use the same tripId
+                tripId = vacationTripId,
                 title = titleEditText.text.toString(),
                 description = descriptionEditText.text.toString(),
                 location = locationEditText.text.toString(),
