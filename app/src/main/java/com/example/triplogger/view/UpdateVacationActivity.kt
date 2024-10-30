@@ -3,16 +3,21 @@ package com.example.triplogger.view
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.triplogger.R
 import com.example.triplogger.model.Vacation
 import com.example.vacationlogger.viewModel.VacationViewModel
 import androidx.lifecycle.Observer
+import com.example.triplogger.utils.LocationAutocompleteHelper
+import com.google.android.gms.maps.model.LatLng
 
 class UpdateVacationActivity : AppCompatActivity() {
 
     private val vacationViewModel: VacationViewModel by viewModels()
+    private lateinit var locationAutocompleteHelper: LocationAutocompleteHelper
+    private var selectedLatLng: LatLng? = null // Variable to store latitude and longitude
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +29,9 @@ class UpdateVacationActivity : AppCompatActivity() {
         val vacationLocation = intent.getStringExtra("VACATION_LOCATION")
         val vacationDate = intent.getStringExtra("VACATION_DATE")
         val vacationNotes = intent.getStringExtra("VACATION_NOTES")
+        val vacationLatitude = intent.getDoubleExtra("VACATION_LATITUDE", 0.0) // Get existing latitude
+        val vacationLongitude = intent.getDoubleExtra("VACATION_LONGITUDE", 0.0) // Get existing longitude
+
 
         val titleEditText = findViewById<EditText>(R.id.titleEditText)
         val descriptionEditText = findViewById<EditText>(R.id.descriptionEditText)
@@ -39,6 +47,21 @@ class UpdateVacationActivity : AppCompatActivity() {
         dateEditText.setText(vacationDate)
         notesEditText.setText(vacationNotes)
 
+        // Initialize selectedLatLng to existing values
+        selectedLatLng = LatLng(vacationLatitude, vacationLongitude)
+
+        // Initialize AutocompleteHelper with a launcher for the autocomplete result
+        val autocompleteLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            // Handle the autocomplete result and get LatLng
+            selectedLatLng = locationAutocompleteHelper.handleAutocompleteResult(result.resultCode, result.data, locationEditText)
+        }
+        locationAutocompleteHelper = LocationAutocompleteHelper(this, autocompleteLauncher)
+
+        // Launch autocomplete when location EditText is clicked
+        locationEditText.setOnClickListener {
+            locationAutocompleteHelper.launchAutocomplete()
+        }
+
         updateButton.setOnClickListener {
             val updatedVacation = Vacation(
                 tripId = vacationTripId,
@@ -46,6 +69,8 @@ class UpdateVacationActivity : AppCompatActivity() {
                 description = descriptionEditText.text.toString(),
                 location = locationEditText.text.toString(),
                 date = dateEditText.text.toString(),
+                latitude = selectedLatLng?.latitude,
+                longitude = selectedLatLng?.longitude,
                 notes = notesEditText.text.toString()
             )
             vacationViewModel.updateVacation(updatedVacation)

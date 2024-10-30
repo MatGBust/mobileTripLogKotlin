@@ -41,13 +41,17 @@ android {
         }
     }
 
+    buildFeatures{
+        buildConfig = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            buildConfigField("String", "MAP_API_KEY", "\"${secretProperties.getProperty("MAP_API_KEY")}\"")
+        }
+        debug {
+            buildConfigField("String", "MAP_API_KEY", "\"${secretProperties.getProperty("MAP_API_KEY")}\"")
         }
     }
     compileOptions {
@@ -94,6 +98,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.libraries.places:places:2.4.0")
+    implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
