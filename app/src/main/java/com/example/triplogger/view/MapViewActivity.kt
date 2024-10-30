@@ -50,18 +50,21 @@ class MapViewActivity : AppCompatActivity(), OnMapReadyCallback  {
             vacations.forEach{
                 vacation ->
                 if(vacation.latitude != null && vacation.longitude != null) {
-                    googleMap.addMarker(
+                    val marker =googleMap.addMarker(
                         MarkerOptions()
                             .position(LatLng(vacation.latitude, vacation.longitude))
                             .title(vacation.title)
                     )
+                    marker?.tag = vacation.tripId
+
                 }
             }
         })
 
 
-        googleMap.setOnMarkerClickListener {
-            val intent = Intent(this, ListViewActivity::class.java)
+        googleMap.setOnMarkerClickListener { marker ->
+            val intent = Intent(this, VacationDetailedActivity::class.java)
+            intent.putExtra("VACATION_ID", marker.tag as? Int)
             startActivity(intent)
             true
         }

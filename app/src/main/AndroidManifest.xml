@@ -27,6 +27,7 @@
         <activity android:name=".view.MapViewActivity"></activity>
         <activity android:name=".view.UpdateVacationActivity"></activity>
         <activity android:name=".view.AddVacationActivity" />
+        <activity android:name=".view.VacationDetailedActivity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAP_API_KEY}" />

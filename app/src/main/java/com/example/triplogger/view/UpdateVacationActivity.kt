@@ -1,6 +1,7 @@
 package com.example.triplogger.view
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,43 +13,58 @@ import com.example.vacationlogger.viewModel.VacationViewModel
 import androidx.lifecycle.Observer
 import com.example.triplogger.utils.LocationAutocompleteHelper
 import com.google.android.gms.maps.model.LatLng
+private const val TAG = "UpdateVacationActivity"
 
 class UpdateVacationActivity : AppCompatActivity() {
 
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var locationAutocompleteHelper: LocationAutocompleteHelper
     private var selectedLatLng: LatLng? = null // Variable to store latitude and longitude
+    private lateinit var titleEditText : EditText
+    private lateinit var descriptionEditText : EditText
+    private lateinit var locationEditText : EditText
+    private lateinit var dateEditText : EditText
+    private lateinit var notesEditText : EditText
+    private lateinit var updateButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_update_vacation)
 
-        val vacationTripId = intent.getIntExtra("VACATION_TRIP_ID", -1)
-        val vacationTitle = intent.getStringExtra("VACATION_TITLE")
-        val vacationDescription = intent.getStringExtra("VACATION_DESCRIPTION")
-        val vacationLocation = intent.getStringExtra("VACATION_LOCATION")
-        val vacationDate = intent.getStringExtra("VACATION_DATE")
-        val vacationNotes = intent.getStringExtra("VACATION_NOTES")
-        val vacationLatitude = intent.getDoubleExtra("VACATION_LATITUDE", 0.0) // Get existing latitude
-        val vacationLongitude = intent.getDoubleExtra("VACATION_LONGITUDE", 0.0) // Get existing longitude
+        titleEditText = findViewById<EditText>(R.id.titleEditText)
+        descriptionEditText = findViewById<EditText>(R.id.descriptionEditText)
+        locationEditText = findViewById<EditText>(R.id.locationEditText)
+        dateEditText = findViewById<EditText>(R.id.dateEditText)
+        notesEditText = findViewById<EditText>(R.id.notesEditText)
+        updateButton = findViewById<Button>(R.id.buttonUpdateVacation)
 
+        // Retrieve the vacation ID from the intent
+        val vacationId = intent.getIntExtra("VACATION_ID", -1)
 
-        val titleEditText = findViewById<EditText>(R.id.titleEditText)
-        val descriptionEditText = findViewById<EditText>(R.id.descriptionEditText)
-        val locationEditText = findViewById<EditText>(R.id.locationEditText)
-        val dateEditText = findViewById<EditText>(R.id.dateEditText)
-        val notesEditText = findViewById<EditText>(R.id.notesEditText)
-        val updateButton = findViewById<Button>(R.id.buttonUpdateVacation)
+        // Check if the vacationId is valid
+        if (vacationId != -1) {
+            // Observe the vacation details
+            vacationViewModel.getVacationById(vacationId).observe(this, Observer { vacation ->
+                if (vacation != null) {
+                    // Set the current vacation details into the EditTexts
+                    titleEditText.setText(vacation.title)
+                    descriptionEditText.setText(vacation.description)
+                    locationEditText.setText(vacation.location)
+                    dateEditText.setText(vacation.date)
+                    notesEditText.setText(vacation.notes)
 
-        // Set the current vacation details into the EditTexts
-        titleEditText.setText(vacationTitle)
-        descriptionEditText.setText(vacationDescription)
-        locationEditText.setText(vacationLocation)
-        dateEditText.setText(vacationDate)
-        notesEditText.setText(vacationNotes)
+                    // Initialize selectedLatLng to existing values
+                    if (vacation.latitude != null && vacation.longitude != null) selectedLatLng = LatLng(vacation.latitude, vacation.longitude)
 
-        // Initialize selectedLatLng to existing values
-        selectedLatLng = LatLng(vacationLatitude, vacationLongitude)
+                } else {
+                    Log.e(TAG, "Vacation not found with ID: $vacationId")
+                    // Handle the case where vacation is not found
+                }
+            })
+        } else {
+            Log.e(TAG, "Invalid vacation ID")
+            // Handle invalid ID case
+        }
 
         // Initialize AutocompleteHelper with a launcher for the autocomplete result
         val autocompleteLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -64,7 +80,7 @@ class UpdateVacationActivity : AppCompatActivity() {
 
         updateButton.setOnClickListener {
             val updatedVacation = Vacation(
-                tripId = vacationTripId,
+                tripId = vacationId,
                 title = titleEditText.text.toString(),
                 description = descriptionEditText.text.toString(),
                 location = locationEditText.text.toString(),
@@ -76,5 +92,9 @@ class UpdateVacationActivity : AppCompatActivity() {
             vacationViewModel.updateVacation(updatedVacation)
             finish() // Close the activity
         }
+    }
+
+    private fun setEditTexts(vacation: Vacation) {
+
     }
 }

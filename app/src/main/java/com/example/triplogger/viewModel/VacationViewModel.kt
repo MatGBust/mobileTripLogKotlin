@@ -40,4 +40,8 @@ class VacationViewModel(application: Application) : AndroidViewModel(application
             repository.updateVacation(vacation)
         }
     }
+
+    fun getVacationById(vacationId: Int): LiveData<Vacation> {
+        return repository.getVacationById(vacationId)
+    }
 }

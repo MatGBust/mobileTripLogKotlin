@@ -18,4 +18,7 @@ interface VacationDao {
 
     @Update
     suspend fun updateVacation(vacation: Vacation)
+
+    @Query("SELECT * FROM vacation_table WHERE tripId = :vacationId")
+    fun getVacationByVacationId(vacationId: Int): LiveData<Vacation>
 }

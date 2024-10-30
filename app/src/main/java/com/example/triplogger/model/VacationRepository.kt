@@ -20,4 +20,9 @@ class VacationRepository(private val vacationDao: VacationDao) {
         vacationDao.updateVacation(vacation)
     }
 
+    // Return a LiveData<Vacation?> based on the vacationId
+    fun getVacationById(vacationId: Int): LiveData<Vacation> {
+        return vacationDao.getVacationByVacationId(vacationId)
+    }
+
 }

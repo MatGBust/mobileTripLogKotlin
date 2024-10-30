@@ -21,10 +21,10 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
         val descriptionTextView: TextView = itemView.findViewById(R.id.descriptionTextView)
         val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
-        val notesTextView: TextView = itemView.findViewById(R.id.notesTextView)
 
         val deleteButton: Button = itemView.findViewById(R.id.buttonDelete)
         val updateButton: Button = itemView.findViewById(R.id.buttonUpdate)
+        val moreDetailsButton: Button = itemView.findViewById(R.id.buttonMoreDetails)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacationViewHolder {
@@ -38,7 +38,6 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
         holder.descriptionTextView.text = vacation.description
         holder.dateTextView.text = vacation.date
         holder.locationTextView.text = vacation.location
-        holder.notesTextView.text = vacation.notes
         // Set up delete button click listener
         holder.deleteButton.setOnClickListener {
             // Remove the vacation from the list
@@ -49,12 +48,14 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
 
         holder.updateButton.setOnClickListener {
             val intent = Intent(holder.itemView.context, UpdateVacationActivity::class.java).apply {
-                putExtra("VACATION_TRIP_ID", vacation.tripId)
-                putExtra("VACATION_TITLE", vacation.title)
-                putExtra("VACATION_DESCRIPTION", vacation.description)
-                putExtra("VACATION_LOCATION", vacation.location)
-                putExtra("VACATION_DATE", vacation.date)
-                putExtra("VACATION_NOTES", vacation.notes)
+                putExtra("VACATION_ID", vacation.tripId)
+            }
+            holder.itemView.context.startActivity(intent)
+        }
+
+        holder.moreDetailsButton.setOnClickListener {
+            val intent = Intent(holder.itemView.context, VacationDetailedActivity::class.java).apply {
+                putExtra("VACATION_ID", vacation.tripId)
             }
             holder.itemView.context.startActivity(intent)
         }
