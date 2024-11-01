@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "126550544766",
+    "project_id": "mobileappdev-437417",
+    "storage_bucket": "mobileappdev-437417.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126550544766:android:1c575c6ec86a277a56632f",
+        "android_client_info": {
+          "package_name": "com.example.triplogger"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJoj9mRhpeasjpxMoSCWvpBZ6KSJjJgt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

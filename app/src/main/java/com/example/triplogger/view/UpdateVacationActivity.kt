@@ -39,31 +39,13 @@ class UpdateVacationActivity : AppCompatActivity() {
         updateButton = findViewById<Button>(R.id.buttonUpdateVacation)
 
         // Retrieve the vacation ID from the intent
-        val vacationId = intent.getIntExtra("VACATION_ID", -1)
+        val vacationId = intent.getStringExtra("VACATION_ID")
 
         // Check if the vacationId is valid
-        if (vacationId != -1) {
-            // Observe the vacation details
-            vacationViewModel.getVacationById(vacationId).observe(this, Observer { vacation ->
-                if (vacation != null) {
-                    // Set the current vacation details into the EditTexts
-                    titleEditText.setText(vacation.title)
-                    descriptionEditText.setText(vacation.description)
-                    locationEditText.setText(vacation.location)
-                    dateEditText.setText(vacation.date)
-                    notesEditText.setText(vacation.notes)
-
-                    // Initialize selectedLatLng to existing values
-                    if (vacation.latitude != null && vacation.longitude != null) selectedLatLng = LatLng(vacation.latitude, vacation.longitude)
-
-                } else {
-                    Log.e(TAG, "Vacation not found with ID: $vacationId")
-                    // Handle the case where vacation is not found
-                }
+        vacationId?.let { id ->
+            vacationViewModel.getVacationById(id).observe(this, Observer { vacation ->
+                vacation?.let { setEditTexts(it) } ?: Log.e(TAG, "Vacation not found with ID: $id")
             })
-        } else {
-            Log.e(TAG, "Invalid vacation ID")
-            // Handle invalid ID case
         }
 
         // Initialize AutocompleteHelper with a launcher for the autocomplete result
@@ -80,7 +62,7 @@ class UpdateVacationActivity : AppCompatActivity() {
 
         updateButton.setOnClickListener {
             val updatedVacation = Vacation(
-                tripId = vacationId,
+                id = vacationId,
                 title = titleEditText.text.toString(),
                 description = descriptionEditText.text.toString(),
                 location = locationEditText.text.toString(),
@@ -89,12 +71,19 @@ class UpdateVacationActivity : AppCompatActivity() {
                 longitude = selectedLatLng?.longitude,
                 notes = notesEditText.text.toString()
             )
-            vacationViewModel.updateVacation(updatedVacation)
-            finish() // Close the activity
+            vacationId?.let { id -> vacationViewModel.updateVacation(id, updatedVacation) }
+            finish()
         }
     }
 
     private fun setEditTexts(vacation: Vacation) {
-
+        titleEditText.setText(vacation.title)
+        descriptionEditText.setText(vacation.description)
+        locationEditText.setText(vacation.location)
+        dateEditText.setText(vacation.date)
+        notesEditText.setText(vacation.notes)
+        if (vacation.latitude != null && vacation.longitude != null) {
+            selectedLatLng = LatLng(vacation.latitude, vacation.longitude)
+        }
     }
 }

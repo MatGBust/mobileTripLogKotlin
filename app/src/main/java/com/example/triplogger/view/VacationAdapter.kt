@@ -1,6 +1,7 @@
 package com.example.triplogger.view
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.triplogger.R
 import com.example.triplogger.model.Vacation
 import com.example.vacationlogger.viewModel.VacationViewModel
+
+private const val TAG = "VacationAdapter"
 
 class VacationAdapter(val vacationList: MutableList<Vacation>,
                       private val vacationViewModel: VacationViewModel
@@ -40,22 +43,24 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
         holder.locationTextView.text = vacation.location
         // Set up delete button click listener
         holder.deleteButton.setOnClickListener {
-            // Remove the vacation from the list
-            vacationViewModel.deleteVacation(vacation) // Call the delete method from ViewModel
-            vacationList.removeAt(position) // Remove from the adapter's list
-            notifyItemRemoved(position) // Notify RecyclerView of the item removal
+            vacation.id?.let { id ->
+                vacationViewModel.deleteVacation(id) // Pass the Firebase string ID to delete
+                vacationList.removeAt(position)
+                notifyItemRemoved(position)
+            }
         }
 
         holder.updateButton.setOnClickListener {
             val intent = Intent(holder.itemView.context, UpdateVacationActivity::class.java).apply {
-                putExtra("VACATION_ID", vacation.tripId)
+                putExtra("VACATION_ID", vacation.id)
             }
             holder.itemView.context.startActivity(intent)
         }
 
         holder.moreDetailsButton.setOnClickListener {
+            Log.e(TAG, vacation.id.toString())
             val intent = Intent(holder.itemView.context, VacationDetailedActivity::class.java).apply {
-                putExtra("VACATION_ID", vacation.tripId)
+                putExtra("VACATION_ID", vacation.id)
             }
             holder.itemView.context.startActivity(intent)
         }

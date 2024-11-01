@@ -55,7 +55,7 @@ class MapViewActivity : AppCompatActivity(), OnMapReadyCallback  {
                             .position(LatLng(vacation.latitude, vacation.longitude))
                             .title(vacation.title)
                     )
-                    marker?.tag = vacation.tripId
+                    marker?.tag = vacation.id
 
                 }
             }
@@ -64,7 +64,7 @@ class MapViewActivity : AppCompatActivity(), OnMapReadyCallback  {
 
         googleMap.setOnMarkerClickListener { marker ->
             val intent = Intent(this, VacationDetailedActivity::class.java)
-            intent.putExtra("VACATION_ID", marker.tag as? Int)
+            intent.putExtra("VACATION_ID", marker.tag as? String)
             startActivity(intent)
             true
         }

@@ -26,30 +26,26 @@ class VacationDetailedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vacation_detalied)
 
-        titleTextView = findViewById<TextView>(R.id.titleTextView)
-        descriptionTextView = findViewById<TextView>(R.id.descriptionTextView)
-        dateTextView = findViewById<TextView>(R.id.dateTextView)
-        locationTextView = findViewById<TextView>(R.id.locationTextView)
-        notesTextView = findViewById<TextView>(R.id.notesTextView)
+        titleTextView = findViewById(R.id.titleTextView)
+        descriptionTextView = findViewById(R.id.descriptionTextView)
+        dateTextView = findViewById(R.id.dateTextView)
+        locationTextView = findViewById(R.id.locationTextView)
+        notesTextView = findViewById(R.id.notesTextView)
 
+        // Retrieve the Firebase vacation ID
+        val vacationId = intent.getStringExtra("VACATION_ID")
 
-        // Retrieve the vacation ID from the intent
-        val vacationId = intent.getIntExtra("VACATION_ID", -1)
-
-        // Check if the vacationId is valid
-        if (vacationId != -1) {
-            // Observe the vacation details
+        // Observe vacation data if the ID is valid
+        if (vacationId != null) {
             vacationViewModel.getVacationById(vacationId).observe(this, Observer { vacation ->
                 if (vacation != null) {
                     displayVacationDetails(vacation)
                 } else {
                     Log.e(TAG, "Vacation not found with ID: $vacationId")
-                    // Handle the case where vacation is not found
                 }
             })
         } else {
-            Log.e(TAG, "Invalid vacation ID")
-            // Handle invalid ID case
+            Log.e(TAG, "Invalid or null vacation ID received.")
         }
     }
 
