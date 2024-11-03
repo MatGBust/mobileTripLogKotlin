@@ -8,5 +8,6 @@ data class Vacation(
     val location: String = "",
     val latitude: Double? = null,
     val longitude: Double? = null,
-    val notes: String = ""
+    val notes: String = "",
+    val photos: List<String> = listOf()
 )

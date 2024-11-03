@@ -62,11 +62,10 @@
         android:text="Notes Go Here"
         android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/picturesButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pictures:"
-        android:textSize="18sp"/>
+        android:text="Pictures" />
 
 </LinearLayout>
