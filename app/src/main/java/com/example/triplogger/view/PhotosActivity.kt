@@ -5,7 +5,10 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -66,16 +69,21 @@ class PhotosActivity : AppCompatActivity() {
 
     // Check and request storage permissions
     private fun checkAndRequestPermissions() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // Show explanation to the user if necessary
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                Toast.makeText(this, "Storage permission is needed to select photos", Toast.LENGTH_SHORT).show()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11 and above - request MANAGE_EXTERNAL_STORAGE permission
+            if (!Environment.isExternalStorageManager()) {
+                val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:$packageName"))
+                startActivity(intent)
+            } else {
+                openGallery()
             }
-            // Request the permission
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
         } else {
-            // Permission already granted, open the gallery
-            openGallery()
+            // For Android 10 and below - request READ_EXTERNAL_STORAGE permission
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+            } else {
+                openGallery()
+            }
         }
     }
 
@@ -86,7 +94,6 @@ class PhotosActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery()
             } else {
-                // Permission denied, show message explaining how to enable it in settings
                 Toast.makeText(this, "Permission denied. Please enable storage permission in Settings.", Toast.LENGTH_LONG).show()
             }
         }
@@ -100,13 +107,11 @@ class PhotosActivity : AppCompatActivity() {
     }
 
     private fun uploadPhoto(imageUri: Uri) {
-        // Generate a unique file name
         val fileName = "photos/${UUID.randomUUID()}.jpg"
         val photoRef = storage.reference.child(fileName)
 
-        Log.d("PhotosActivity", "Starting upload for file: $fileName")
+        Log.d("PhotosActivity", "Starting upload for file at path: $fileName")
 
-        // Upload the image to Firebase Storage
         photoRef.putFile(imageUri)
             .addOnSuccessListener {
                 Log.d("PhotosActivity", "Photo upload succeeded.")
@@ -114,6 +119,8 @@ class PhotosActivity : AppCompatActivity() {
                     Log.d("PhotosActivity", "Download URL: $downloadUrl")
                     savePhotoUrl(downloadUrl.toString())
                     Toast.makeText(this, "Photo added", Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener { exception ->
+                    Log.e("PhotosActivity", "Failed to get download URL: ${exception.message}")
                 }
             }
             .addOnFailureListener { exception ->
@@ -121,6 +128,8 @@ class PhotosActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to upload photo", Toast.LENGTH_SHORT).show()
             }
     }
+
+
 
     private fun savePhotoUrl(photoUrl: String) {
         vacationViewModel.getVacationById(vacationId).observe(this) { vacation ->
