@@ -9,5 +9,5 @@ data class Vacation(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val notes: String = "",
-    val photos: List<String> = listOf()
+    val photos: MutableList<String> = mutableListOf()
 )

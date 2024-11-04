@@ -7,8 +7,10 @@
     <ImageView
         android:id="@+id/photoImageView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop" />
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:background="#E0E0E0" />
+
 
     <Button
         android:id="@+id/deleteButton"

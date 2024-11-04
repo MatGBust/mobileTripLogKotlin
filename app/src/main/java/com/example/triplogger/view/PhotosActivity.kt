@@ -1,4 +1,3 @@
-// PhotosActivity.kt
 package com.example.triplogger.view
 
 import android.app.Activity
@@ -9,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,23 +21,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.triplogger.R
 import com.example.triplogger.model.Vacation
 import com.example.vacationlogger.viewModel.VacationViewModel
-import com.google.firebase.storage.FirebaseStorage
-import java.util.UUID
-import android.util.Log
 
 class PhotosActivity : AppCompatActivity() {
 
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var photoAdapter: PhotoAdapter
     private lateinit var vacationId: String
-    private lateinit var storage: FirebaseStorage
 
     private val selectImageLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.let { uri ->
-                    uploadPhoto(uri)
+                    grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    savePhotoUri(uri.toString()) // Save URI directly as a string
+                    Toast.makeText(this, "Photo added", Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                Toast.makeText(this, "No photo selected", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -46,7 +46,6 @@ class PhotosActivity : AppCompatActivity() {
         setContentView(R.layout.activity_photos)
 
         vacationId = intent.getStringExtra("VACATION_ID") ?: return
-        storage = FirebaseStorage.getInstance() // Initialize Firebase Storage
 
         val recyclerView = findViewById<RecyclerView>(R.id.photosRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -54,14 +53,14 @@ class PhotosActivity : AppCompatActivity() {
         // Observe vacation photos
         vacationViewModel.getVacationById(vacationId).observe(this) { vacation ->
             if (vacation != null) {
-                photoAdapter = PhotoAdapter(vacation.photos.toMutableList()) { photoUrl ->
-                    deletePhoto(photoUrl)
+                photoAdapter = PhotoAdapter(vacation.photos.toMutableList()) { photoUri ->
+                    deletePhoto(photoUri)
                 }
                 recyclerView.adapter = photoAdapter
             }
         }
 
-        // Set up "Add Photo" button to check permissions before opening the gallery
+        // "Add Photo" button to check permissions before opening the gallery
         findViewById<Button>(R.id.addPhotoButton).setOnClickListener {
             checkAndRequestPermissions()
         }
@@ -70,7 +69,6 @@ class PhotosActivity : AppCompatActivity() {
     // Check and request storage permissions
     private fun checkAndRequestPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // Android 11 and above - request MANAGE_EXTERNAL_STORAGE permission
             if (!Environment.isExternalStorageManager()) {
                 val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:$packageName"))
                 startActivity(intent)
@@ -78,7 +76,6 @@ class PhotosActivity : AppCompatActivity() {
                 openGallery()
             }
         } else {
-            // For Android 10 and below - request READ_EXTERNAL_STORAGE permission
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
             } else {
@@ -90,12 +87,10 @@ class PhotosActivity : AppCompatActivity() {
     // Handle permission result
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGallery()
-            } else {
-                Toast.makeText(this, "Permission denied. Please enable storage permission in Settings.", Toast.LENGTH_LONG).show()
-            }
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openGallery()
+        } else {
+            Toast.makeText(this, "Permission denied. Please enable storage permission in Settings.", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -106,46 +101,21 @@ class PhotosActivity : AppCompatActivity() {
         selectImageLauncher.launch(intent)
     }
 
-    private fun uploadPhoto(imageUri: Uri) {
-        val fileName = "photos/${UUID.randomUUID()}.jpg"
-        val photoRef = storage.reference.child(fileName)
-
-        Log.d("PhotosActivity", "Starting upload for file at path: $fileName")
-
-        photoRef.putFile(imageUri)
-            .addOnSuccessListener {
-                Log.d("PhotosActivity", "Photo upload succeeded.")
-                photoRef.downloadUrl.addOnSuccessListener { downloadUrl ->
-                    Log.d("PhotosActivity", "Download URL: $downloadUrl")
-                    savePhotoUrl(downloadUrl.toString())
-                    Toast.makeText(this, "Photo added", Toast.LENGTH_SHORT).show()
-                }.addOnFailureListener { exception ->
-                    Log.e("PhotosActivity", "Failed to get download URL: ${exception.message}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.e("PhotosActivity", "Photo upload failed: ${exception.message}")
-                Toast.makeText(this, "Failed to upload photo", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-
-
-    private fun savePhotoUrl(photoUrl: String) {
+    private fun savePhotoUri(uriString: String) {
         vacationViewModel.getVacationById(vacationId).observe(this) { vacation ->
             vacation?.let {
-                val updatedPhotos = it.photos.toMutableList().apply { add(photoUrl) }
+                val updatedPhotos = it.photos.toMutableList().apply { add(uriString) }
                 val updatedVacation = it.copy(photos = updatedPhotos)
                 vacationViewModel.updateVacation(vacationId, updatedVacation)
-                Log.d("PhotosActivity", "Photo URL added to vacation: $photoUrl")
+                Log.d("PhotosActivity", "Local URI added to vacation: $uriString")
             } ?: Log.e("PhotosActivity", "Failed to retrieve vacation for ID: $vacationId")
         }
     }
 
-    private fun deletePhoto(photoUrl: String) {
+    private fun deletePhoto(photoUri: String) {
         vacationViewModel.getVacationById(vacationId).observe(this) { vacation ->
             vacation?.let {
-                val updatedPhotos = it.photos.toMutableList().apply { remove(photoUrl) }
+                val updatedPhotos = it.photos.toMutableList().apply { remove(photoUri) }
                 val updatedVacation = it.copy(photos = updatedPhotos)
                 vacationViewModel.updateVacation(vacationId, updatedVacation)
                 Toast.makeText(this, "Photo deleted", Toast.LENGTH_SHORT).show()

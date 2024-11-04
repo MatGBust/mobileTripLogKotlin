@@ -52,8 +52,9 @@ class AddVacationActivity : AppCompatActivity() {
             val notesTxt = editTextNotes.text.toString()
 
 
+
             if (titleTxt.isNotBlank() && locationTxt.isNotBlank() && dateTxt.isNotBlank()) {
-                val newVacation = Vacation(title = titleTxt, description = descriptionTxt, date =  dateTxt, location =  locationTxt, latitude = selectedLatLng?.latitude, longitude = selectedLatLng?.longitude, notes = notesTxt )
+                val newVacation = Vacation(title = titleTxt, description = descriptionTxt, date =  dateTxt, location =  locationTxt, latitude = selectedLatLng?.latitude, longitude = selectedLatLng?.longitude, notes = notesTxt)
                 vacationViewModel.addVacation(newVacation)
                 finish() // Close the activity after adding the vacation
             } else {

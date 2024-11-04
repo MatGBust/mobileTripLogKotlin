@@ -1,6 +1,9 @@
 // PhotoAdapter.kt
 package com.example.triplogger.view
 
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +12,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.triplogger.R
 import com.bumptech.glide.Glide
+import java.io.InputStream
 
 class PhotoAdapter(
     private val photoList: MutableList<String>,
@@ -26,11 +30,37 @@ class PhotoAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        val photoUrl = photoList[position]
-        Glide.with(holder.itemView.context).load(photoUrl).into(holder.photoImageView)
+        val photoUriString = photoList[position]
+        val photoUri = Uri.parse(photoUriString)
+
+        // Attempt to load the image using Glide
+        Glide.with(holder.itemView.context)
+            .load(photoUri)
+            .placeholder(R.drawable.placeholder) // Optional placeholder drawable
+            .error(R.drawable.error) // Optional error drawable
+            .into(holder.photoImageView)
+
+        // Fallback: If Glide fails to load, use InputStream to decode Google Photos or other URIs
+        holder.photoImageView.post {
+            if (holder.photoImageView.drawable == null) { // Check if Glide failed
+                try {
+                    // Open InputStream for the URI and decode it as a Bitmap
+                    val inputStream: InputStream? = holder.itemView.context.contentResolver.openInputStream(photoUri)
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    inputStream?.close()
+
+                    // Set the decoded Bitmap to the ImageView as a fallback
+                    holder.photoImageView.setImageBitmap(bitmap)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e("PhotoAdapter", "Failed to load image from URI: $photoUriString")
+                    holder.photoImageView.setImageResource(R.drawable.error) // Set error drawable if all else fails
+                }
+            }
+        }
 
         holder.deleteButton.setOnClickListener {
-            onDeleteClick(photoUrl)
+            onDeleteClick(photoUriString)
             photoList.removeAt(position)
             notifyItemRemoved(position)
         }
