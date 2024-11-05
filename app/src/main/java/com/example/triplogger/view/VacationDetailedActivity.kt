@@ -1,7 +1,9 @@
 package com.example.triplogger.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -20,6 +22,7 @@ class VacationDetailedActivity : AppCompatActivity() {
     private lateinit var dateTextView: TextView
     private lateinit var locationTextView: TextView
     private lateinit var notesTextView: TextView
+    private lateinit var picturesButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +34,7 @@ class VacationDetailedActivity : AppCompatActivity() {
         dateTextView = findViewById(R.id.dateTextView)
         locationTextView = findViewById(R.id.locationTextView)
         notesTextView = findViewById(R.id.notesTextView)
+        picturesButton = findViewById(R.id.picturesButton)
 
         // Retrieve the Firebase vacation ID
         val vacationId = intent.getStringExtra("VACATION_ID")
@@ -46,6 +50,12 @@ class VacationDetailedActivity : AppCompatActivity() {
             })
         } else {
             Log.e(TAG, "Invalid or null vacation ID received.")
+        }
+        picturesButton.setOnClickListener {
+            val intent = Intent(this, PhotosActivity::class.java).apply {
+                putExtra("VACATION_ID", vacationId)
+            }
+            startActivity(intent)
         }
     }
 

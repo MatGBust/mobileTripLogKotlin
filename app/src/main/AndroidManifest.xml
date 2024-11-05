@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.triplogger">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -32,6 +37,7 @@
         <activity android:name=".view.UpdateVacationActivity" />
         <activity android:name=".view.AddVacationActivity" />
         <activity android:name=".view.VacationDetailedActivity" />
+        <activity android:name=".view.PhotosActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
