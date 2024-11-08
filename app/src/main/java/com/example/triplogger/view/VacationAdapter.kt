@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.triplogger.R
@@ -25,7 +26,7 @@ class VacationAdapter(val vacationList: MutableList<Vacation>,
         val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
 
-        val deleteButton: Button = itemView.findViewById(R.id.buttonDelete)
+        val deleteButton: ImageButton = itemView.findViewById(R.id.buttonDelete)
         val updateButton: Button = itemView.findViewById(R.id.buttonUpdate)
         val moreDetailsButton: Button = itemView.findViewById(R.id.buttonMoreDetails)
     }
