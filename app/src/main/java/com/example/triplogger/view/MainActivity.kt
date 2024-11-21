@@ -16,13 +16,14 @@ import com.google.firebase.database.FirebaseDatabase
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.i(TAG, "onCreate entered")
+        
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
 
@@ -46,9 +47,10 @@ class MainActivity : AppCompatActivity() {
             logout()
         }
 
-        val mapIconView = ViewIconFragment.newInstance(R.drawable.map, getString(R.string.map_view))
+        val mapIconView = ViewIconFragment.newInstance(
+            R.drawable.map, "map_view", getString(R.string.map_view))
         val listIconView =
-            ViewIconFragment.newInstance(R.drawable.notepad, getString(R.string.list_view))
+            ViewIconFragment.newInstance(R.drawable.notepad, "list_view",getString(R.string.list_view))
         loadFragment(R.id.fragment_map_container, mapIconView)
         loadFragment(R.id.fragment_list_container, listIconView)
     }
@@ -83,7 +85,10 @@ class MainActivity : AppCompatActivity() {
     private fun logout() {
         // Log out from Firebase and clear login flag
         auth.signOut()
-        sharedPreferences.edit().putBoolean("is_logged_in", false).apply()
+        sharedPreferences.edit()
+            .putBoolean("is_logged_in", false)
+            .remove("selected_language")
+            .apply()
 
         // Navigate back to the login activity
         navigateToLogin()

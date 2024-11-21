@@ -15,7 +15,7 @@ import com.example.triplogger.utils.LocationAutocompleteHelper
 import com.google.android.gms.maps.model.LatLng
 private const val TAG = "UpdateVacationActivity"
 
-class UpdateVacationActivity : AppCompatActivity() {
+class UpdateVacationActivity : BaseActivity() {
 
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var locationAutocompleteHelper: LocationAutocompleteHelper

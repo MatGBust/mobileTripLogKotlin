@@ -16,6 +16,7 @@ class ViewIconFragment : Fragment() {
 
 
     private var imageResourceId: Int = 0
+    private lateinit var viewType: String
     private lateinit var labelText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +24,7 @@ class ViewIconFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             imageResourceId = it.getInt(ARG_IMAGE)
+            viewType = it.getString(ARG_VIEW_TYPE).toString()
             labelText = it.getString(ARG_LABEL).toString()
         }
     }
@@ -51,8 +53,9 @@ class ViewIconFragment : Fragment() {
 
     private fun openViewActivity() {
         val context = requireContext()
-        val activityClass = when(labelText){
-            getString(R.string.list_view) -> ListViewActivity::class.java
+        val activityClass = when(viewType){
+            "list_view" -> ListViewActivity::class.java
+            "map_view" -> MapViewActivity::class.java
             else -> MapViewActivity::class.java
 
         }
@@ -63,12 +66,14 @@ class ViewIconFragment : Fragment() {
     companion object {
         private const val ARG_IMAGE = "imageResourceId"
         private const val ARG_LABEL = "labelText"
+        private const val ARG_VIEW_TYPE = "viewType"
 
         @JvmStatic
-        fun newInstance(imageResourceId: Int, labelText: String) =
+        fun newInstance(imageResourceId: Int, viewType: String, labelText: String) =
             ViewIconFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_IMAGE, imageResourceId)
+                    putString(ARG_VIEW_TYPE, viewType)
                     putString(ARG_LABEL, labelText)
                 }
             }

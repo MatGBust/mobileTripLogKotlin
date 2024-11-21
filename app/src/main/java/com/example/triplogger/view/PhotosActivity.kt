@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.triplogger.R
 import com.example.vacationlogger.viewModel.VacationViewModel
 
-class PhotosActivity : AppCompatActivity() {
+class PhotosActivity : BaseActivity() {
 
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var photoAdapter: PhotoAdapter

@@ -30,7 +30,7 @@ private const val TAG = "MapViewActivity"
 private const val REQUEST_LOCATION_PERMISSION = 2
 
 
-class MapViewActivity : AppCompatActivity(), OnMapReadyCallback  {
+class MapViewActivity : BaseActivity(), OnMapReadyCallback  {
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var userLocationMarker: Marker? = null
@@ -93,7 +93,7 @@ class MapViewActivity : AppCompatActivity(), OnMapReadyCallback  {
         vacationViewModel.allVacations.observe(this, Observer { vacations ->
             // Update the RecyclerView with the new list of vacations
             vacations.forEach{
-                vacation ->
+                    vacation ->
                 if(vacation.latitude != null && vacation.longitude != null) {
                     val marker =googleMap.addMarker(
                         MarkerOptions()
