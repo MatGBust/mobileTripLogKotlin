@@ -15,7 +15,7 @@ import com.example.vacationlogger.viewModel.VacationViewModel
 
 private const val TAG = "VacationDetailedActivity"
 
-class VacationDetailedActivity : AppCompatActivity() {
+class VacationDetailedActivity : BaseActivity() {
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var titleTextView: TextView
     private lateinit var descriptionTextView: TextView

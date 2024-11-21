@@ -16,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Vacation Title"
+            android:text="@string/vacation_title"
             android:textSize="18sp"
             android:maxLines="2"
             android:ellipsize="end"
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Date"
+            android:text="@string/date"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Description"
+            android:text="@string/description"
             android:maxLines="2"
             android:ellipsize="end"
             android:textSize="16sp" />
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Location"
+            android:text="@string/location"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -65,14 +65,14 @@
             android:id="@+id/buttonMoreDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="More Details"
+            android:text="@string/more_details"
             android:layout_marginEnd="16dp" />
 
         <Button
             android:id="@+id/buttonUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Update"
+            android:text="@string/update"
             android:layout_marginEnd="16dp" />
 
         <ImageButton
@@ -80,7 +80,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/rounded_black_background"
-            android:contentDescription="Delete"
+            android:contentDescription="@string/delete"
             android:scaleType="centerInside"
             android:src="@drawable/bin"
             android:layout_gravity="center_vertical"

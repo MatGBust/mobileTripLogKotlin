@@ -13,7 +13,7 @@ import com.example.triplogger.utils.LocationAutocompleteHelper
 import com.example.vacationlogger.viewModel.VacationViewModel
 import com.google.android.gms.maps.model.LatLng
 
-class AddVacationActivity : AppCompatActivity() {
+class AddVacationActivity : BaseActivity() {
 
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var locationAutocompleteHelper: LocationAutocompleteHelper

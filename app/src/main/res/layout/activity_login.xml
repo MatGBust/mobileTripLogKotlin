@@ -29,7 +29,7 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/oval_edit_text"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textSize="18sp" />
@@ -40,7 +40,7 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/oval_edit_text"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:padding="12dp"
                 android:textSize="18sp" />
@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:backgroundTint="#6200EE"
-                android:text="Login/Register"
+                android:text="@string/login_register"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp" />
         </LinearLayout>

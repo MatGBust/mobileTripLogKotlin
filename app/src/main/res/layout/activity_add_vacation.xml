@@ -9,36 +9,36 @@
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="Vacation Title" />
+        android:hint="@string/vacation_title" />
 
     <EditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="Vacation Description" />
+        android:hint="@string/vacation_description" />
 
     <EditText
         android:id="@+id/editTextDate"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="Vacation Date" />
+        android:hint="@string/vacation_date" />
 
     <EditText
         android:id="@+id/editTextLocation"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:focusable="false"
-        android:hint="Vacation Location" />
+        android:hint="@string/vacation_location" />
 
     <EditText
         android:id="@+id/editTextNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Vacation Notes" />
+        android:hint="@string/vacation_notes" />
 
     <Button
         android:id="@+id/buttonAddVacation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Vacation" />
+        android:text="@string/add_vacation" />
 </LinearLayout>

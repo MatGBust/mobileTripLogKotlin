@@ -15,7 +15,7 @@ import androidx.lifecycle.Observer
 
 private const val TAG = "ListViewActivity"
 
-class ListViewActivity : AppCompatActivity() {
+class ListViewActivity : BaseActivity() {
 
     private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var vacationAdapter: VacationAdapter

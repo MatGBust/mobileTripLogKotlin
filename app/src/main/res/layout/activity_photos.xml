@@ -8,7 +8,7 @@
         android:id="@+id/addPhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Photo"
+        android:text="@string/add_photo"
         android:layout_gravity="end" />
 
     <androidx.recyclerview.widget.RecyclerView
