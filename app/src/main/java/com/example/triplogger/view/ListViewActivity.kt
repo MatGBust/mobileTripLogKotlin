@@ -48,4 +48,14 @@ class ListViewActivity : BaseActivity() {
             startActivity(intent)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Nullify adapter to release references
+        findViewById<RecyclerView>(R.id.vacationRecyclerView).adapter = null
+
+        // Remove observers to avoid leaks
+        vacationViewModel.allVacations.removeObservers(this)
+    }
+
 }
