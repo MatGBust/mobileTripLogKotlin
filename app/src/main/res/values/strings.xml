@@ -2,6 +2,7 @@
     <string name="app_name">tripLogger</string>
     <string name="please_enter_credentials">Please enter both email and password</string>
     <string name="enter_credentials">Please enter both email and password</string>
+    <string name="location_error">Error in selecting location</string>
     <string name="auth_failed">Authentication failed: %1$s</string>
     <string name= "select_language">Select Language</string>
     <string name="map_view" >Map View</string>

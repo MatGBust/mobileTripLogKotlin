@@ -9,6 +9,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import com.example.triplogger.BuildConfig
+import com.example.triplogger.R
+import com.example.triplogger.view.BaseActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -16,14 +18,21 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import java.util.Locale
 
 
-class LocationAutocompleteHelper(private val context: Context, private val autocompleteLauncher: ActivityResultLauncher<Intent>) {
+class LocationAutocompleteHelper(private val context: Context, private val autocompleteLauncher: ActivityResultLauncher<Intent>): BaseActivity() {
 
     init {
-        // Initialize the Places API
+        val sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val selectedLanguage = sharedPreferences.getString("selected_language", "en") ?: "en"
+
+        if (context is BaseActivity) {
+            context.updateLocale(selectedLanguage)
+        }
+        val locale = Locale(selectedLanguage)
         if (!Places.isInitialized()) {
-            Places.initialize(context.applicationContext, BuildConfig.MAP_API_KEY)
+            Places.initialize(context.applicationContext, BuildConfig.MAP_API_KEY, locale)
         }
     }
 
@@ -35,6 +44,7 @@ class LocationAutocompleteHelper(private val context: Context, private val autoc
             Place.Field.LAT_LNG,
             Place.Field.ADDRESS_COMPONENTS
         )
+
 
         val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
             .setTypeFilter(TypeFilter.CITIES) // Set to only show cities
@@ -69,7 +79,7 @@ class LocationAutocompleteHelper(private val context: Context, private val autoc
             }
         } else {
             if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                Toast.makeText(context, "Error in selecting location", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.location_error), Toast.LENGTH_SHORT).show()
             }
             null
         }

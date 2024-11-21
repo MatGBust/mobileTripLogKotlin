@@ -33,10 +33,10 @@ class PhotosActivity : BaseActivity() {
                 result.data?.data?.let { uri ->
                     grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     savePhotoUri(uri.toString()) // Save URI directly as a string
-                    Toast.makeText(this, "Photo added", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.photo_added), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "No photo selected", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.no_photo_selected), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -122,7 +122,7 @@ class PhotosActivity : BaseActivity() {
                 val updatedPhotos = it.photos.toMutableList().apply { remove(photoUri) }
                 val updatedVacation = it.copy(photos = updatedPhotos)
                 vacationViewModel.updateVacation(vacationId, updatedVacation)
-                Toast.makeText(this, "Photo deleted", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.photo_deleted), Toast.LENGTH_SHORT).show()
             }
         }
     }
