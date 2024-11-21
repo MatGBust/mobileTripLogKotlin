@@ -14,7 +14,7 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
-    protected fun updateLocale(language: String) {
+    public fun updateLocale(language: String) {
         val locale = Locale(language)
         Locale.setDefault(locale)
         val config = resources.configuration
