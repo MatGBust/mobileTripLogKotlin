@@ -17,7 +17,6 @@ private const val TAG = "ListViewActivity"
 
 class ListViewActivity : BaseActivity() {
 
-    private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var vacationAdapter: VacationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

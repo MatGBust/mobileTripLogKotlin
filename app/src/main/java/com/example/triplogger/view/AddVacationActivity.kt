@@ -15,7 +15,6 @@ import com.google.android.gms.maps.model.LatLng
 
 class AddVacationActivity : BaseActivity() {
 
-    private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var locationAutocompleteHelper: LocationAutocompleteHelper
     private var selectedLatLng: LatLng? = null // Variable to store latitude and longitude
 

@@ -31,7 +31,6 @@ private const val REQUEST_LOCATION_PERMISSION = 2
 
 
 class MapViewActivity : BaseActivity(), OnMapReadyCallback  {
-    private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var userLocationMarker: Marker? = null
 

@@ -1,15 +1,18 @@
 package com.example.triplogger.model
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.triplogger.utilities.NetworkUtils
+import com.example.triplogger.utilities.NoNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
-class VacationRepository {
+class VacationRepository(private val context: Context) {
 
     private val firebaseDb = FirebaseDatabase.getInstance()
     private val userVacationsRef = firebaseDb.reference.child("users")
@@ -40,6 +43,9 @@ class VacationRepository {
 
     // Add a new vacation to Firebase
     fun addVacation(vacation: Vacation) {
+        if (!NetworkUtils.isNetworkAvailable(context)) {
+            throw NoNetworkException("No Internet connection available.")
+        }
         val newVacationRef = userVacationsRef.push() // Create a new unique key for each vacation
         val vacationId = newVacationRef.key
         val vacationWithId = vacation.copy(id = vacationId)
@@ -48,16 +54,25 @@ class VacationRepository {
 
     // Delete a vacation from Firebase
     fun deleteVacation(vacationId: String) {
+        if (!NetworkUtils.isNetworkAvailable(context)) {
+            throw NoNetworkException("No Internet connection available.")
+        }
         userVacationsRef.child(vacationId).removeValue()
     }
 
     // Update an existing vacation in Firebase
     fun updateVacation(vacationId: String, updatedVacation: Vacation) {
+        if (!NetworkUtils.isNetworkAvailable(context)) {
+            throw NoNetworkException("No Internet connection available.")
+        }
         userVacationsRef.child(vacationId).setValue(updatedVacation)
     }
 
     // Fetch a single vacation by its ID
     fun getVacationById(vacationId: String): LiveData<Vacation?> {
+        if (!NetworkUtils.isNetworkAvailable(context)) {
+            throw NoNetworkException("No Internet connection available.")
+        }
         val vacationLiveData = MutableLiveData<Vacation?>()
         userVacationsRef.child(vacationId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

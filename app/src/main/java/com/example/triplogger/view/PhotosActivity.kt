@@ -23,7 +23,6 @@ import com.example.vacationlogger.viewModel.VacationViewModel
 
 class PhotosActivity : BaseActivity() {
 
-    private val vacationViewModel: VacationViewModel by viewModels()
     private lateinit var photoAdapter: PhotoAdapter
     private lateinit var vacationId: String
 

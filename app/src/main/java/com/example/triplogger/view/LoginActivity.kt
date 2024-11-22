@@ -8,14 +8,12 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.example.triplogger.R
-import com.example.triplogger.model.VacationRepository
 import com.google.firebase.auth.FirebaseAuth
-import java.util.Locale
+import com.example.triplogger.utilities.NetworkUtils.isNetworkAvailable
 
 class LoginActivity : BaseActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var repository: VacationRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +22,14 @@ class LoginActivity : BaseActivity() {
         promptForLanguageIfNeeded()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!isNetworkAvailable(this)) {
+            showNoConnectionDialog()
+        }
+    }
+
+
     private fun promptForLanguageIfNeeded() {
         val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val selectedLanguage = sharedPreferences.getString("selected_language", null)
@@ -31,7 +37,12 @@ class LoginActivity : BaseActivity() {
         if (selectedLanguage != null) {
             // Language is already selected, set the locale and proceed with UI setup
             updateLocale(selectedLanguage)
-            setupUI()
+            if (!isNetworkAvailable(this)) {
+                showNoConnectionDialog()
+            } else {
+                // Proceed with normal app flow
+                setupUI()
+            }
         } else {
             // Prompt the user to select a language
             showLanguageSelectionDialog()
@@ -42,7 +53,6 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.activity_login)
 
         auth = FirebaseAuth.getInstance()
-        repository = VacationRepository()
 
         val loginButton = findViewById<Button>(R.id.login_button)
         val username = findViewById<EditText>(R.id.username)
