@@ -13,12 +13,15 @@ import com.example.triplogger.utilities.NetworkUtils.isNetworkAvailable
 
 class LoginActivity : BaseActivity() {
 
+    private val sharedPreferences: SharedPreferences by lazy {
+        getSharedPreferences("user_prefs", MODE_PRIVATE)
+    }
     private lateinit var auth: FirebaseAuth
+    private var languageDialog: AlertDialog? = null
+    private var isRecreating = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Check and prompt for language selection
         promptForLanguageIfNeeded()
     }
 
@@ -29,30 +32,38 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-
     private fun promptForLanguageIfNeeded() {
-        val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-        val selectedLanguage = sharedPreferences.getString("selected_language", null)
+        if (isRecreating) return
 
+        val selectedLanguage = sharedPreferences.getString("selected_language", null)
         if (selectedLanguage != null) {
-            // Language is already selected, set the locale and proceed with UI setup
             updateLocale(selectedLanguage)
-            if (!isNetworkAvailable(this)) {
-                showNoConnectionDialog()
-            } else {
-                // Proceed with normal app flow
-                setupUI()
-            }
+            setupUI()
         } else {
-            // Prompt the user to select a language
             showLanguageSelectionDialog()
         }
     }
 
-    private fun setupUI() {
-        setContentView(R.layout.activity_login)
+    private fun showLanguageSelectionDialog() {
+        val languages = arrayOf("English", "Español")
+        languageDialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.select_language))
+            .setItems(languages) { _, which ->
+                val locale = if (which == 1) "es" else "en"
+                sharedPreferences.edit().putString("selected_language", locale).apply()
+                updateLocale(locale)
+                isRecreating = true
+                recreate()
+            }
+            .setCancelable(false)
+            .show()
+    }
 
-        auth = FirebaseAuth.getInstance()
+    private fun setupUI() {
+        if (!::auth.isInitialized) {
+            auth = FirebaseAuth.getInstance()
+        }
+        setContentView(R.layout.activity_login)
 
         val loginButton = findViewById<Button>(R.id.login_button)
         val username = findViewById<EditText>(R.id.username)
@@ -68,6 +79,11 @@ class LoginActivity : BaseActivity() {
                 Toast.makeText(this, getString(R.string.enter_credentials), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        languageDialog?.dismiss()
     }
 
     private fun signInOrSignUp(email: String, password: String) {
@@ -90,39 +106,9 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun showLanguageSelectionDialog() {
-        val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
-
-        // Show the language selection dialog
-        val languages = arrayOf("English", "Español")
-        AlertDialog.Builder(this)
-            .setTitle(getString(R.string.select_language))
-            .setItems(languages) { _, which ->
-                val locale = when (which) {
-                    0 -> "en" // English
-                    1 -> "es" // Spanish
-                    else -> "en"
-                }
-
-                // Save the selected language in SharedPreferences
-                sharedPreferences.edit().putString("selected_language", locale).apply()
-
-                // Update the locale
-                updateLocale(locale)
-
-                // Recreate the activity to apply the new language and set up the UI
-                recreate()
-            }
-            .setCancelable(false)
-            .show()
-    }
-
     private fun onLoginSuccess() {
-        val sharedPreferences: SharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
         sharedPreferences.edit().putBoolean("is_logged_in", true).apply()
-
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }
