@@ -41,6 +41,38 @@ class VacationRepository(private val context: Context) {
         })
     }
 
+    fun fetchVacationsPaginated(startKey: String?, limit: Int, callback: (List<Vacation>, String?) -> Unit) {
+        if (!NetworkUtils.isNetworkAvailable(context)) {
+            throw NoNetworkException("No Internet connection available.")
+        }
+
+        val query = if (startKey != null) {
+            userVacationsRef.orderByKey().startAfter(startKey).limitToFirst(limit)
+        } else {
+            userVacationsRef.orderByKey().limitToFirst(limit)
+        }
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val vacationList = mutableListOf<Vacation>()
+                var lastKey: String? = null
+                for (vacationSnapshot in snapshot.children) {
+                    val vacation = vacationSnapshot.getValue(Vacation::class.java)
+                    vacation?.let {
+                        vacationList.add(it)
+                        lastKey = vacationSnapshot.key
+                    }
+                }
+                callback(vacationList, lastKey)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("VacationRepository", "Error fetching paginated vacations", error.toException())
+                callback(emptyList(), null)
+            }
+        })
+    }
+
     // Add a new vacation to Firebase
     fun addVacation(vacation: Vacation) {
         if (!NetworkUtils.isNetworkAvailable(context)) {
@@ -87,4 +119,5 @@ class VacationRepository(private val context: Context) {
         })
         return vacationLiveData
     }
+
 }

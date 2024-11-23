@@ -17,6 +17,26 @@ class VacationViewModel(application: Application) : AndroidViewModel(application
     private val _networkError = MutableLiveData<String>()
     val networkError: LiveData<String> get() = _networkError
 
+    private val _paginatedVacations = MutableLiveData<List<Vacation>>()
+    val paginatedVacations: LiveData<List<Vacation>> get() = _paginatedVacations
+
+    private var lastKey: String? = null
+    private var isLoading = false
+
+    fun loadNextPage(limit: Int) {
+        if (isLoading) return
+        isLoading = true
+        repository.fetchVacationsPaginated(lastKey, limit) { vacations, newLastKey ->
+            if (vacations.isNotEmpty()) {
+                val currentList = _paginatedVacations.value.orEmpty().toMutableList()
+                currentList.addAll(vacations)
+                _paginatedVacations.postValue(currentList)
+                lastKey = newLastKey
+            }
+            isLoading = false
+        }
+    }
+
     // Add a new vacation
     fun addVacation(vacation: Vacation) {
         try {
