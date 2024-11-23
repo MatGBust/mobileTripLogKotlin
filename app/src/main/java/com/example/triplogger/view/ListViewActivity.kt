@@ -4,23 +4,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.triplogger.R
 import com.example.triplogger.model.Vacation
-import com.example.vacationlogger.viewModel.VacationViewModel
 
 private const val TAG = "ListViewActivity"
 
-class ListViewActivity : AppCompatActivity() {
+class ListViewActivity : BaseActivity() {
 
     private lateinit var vacationAdapter: VacationAdapter
-    private val vacationViewModel: VacationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Locale update happens in BaseActivity
         Log.i(TAG, "onCreate entered")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_view)
@@ -30,14 +27,17 @@ class ListViewActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = vacationAdapter
 
+        // Observe paginated vacations
         vacationViewModel.paginatedVacations.observe(this, Observer { vacations ->
             vacationAdapter.vacationList.clear()
             vacationAdapter.vacationList.addAll(vacations)
             vacationAdapter.notifyDataSetChanged()
         })
 
-        vacationViewModel.loadNextPage(6) // Load the first page of 10 items
+        // Load the first page of vacations
+        vacationViewModel.loadNextPage(6)
 
+        // Add pagination via scroll listener
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -51,6 +51,7 @@ class ListViewActivity : AppCompatActivity() {
             }
         })
 
+        // Add new vacation button
         val buttonAddVacation = findViewById<Button>(R.id.buttonAddVacation)
         buttonAddVacation.setOnClickListener {
             val intent = Intent(this, AddVacationActivity::class.java)
