@@ -87,20 +87,25 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun signInOrSignUp(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                onLoginSuccess()
-            } else {
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { createTask ->
-                    if (createTask.isSuccessful) {
-                        onLoginSuccess()
-                    } else {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.auth_failed, createTask.exception?.message),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+        if (!isNetworkAvailable(this)) {
+            showNoConnectionDialog()
+        } else {
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onLoginSuccess()
+                } else {
+                    auth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener { createTask ->
+                            if (createTask.isSuccessful) {
+                                onLoginSuccess()
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.auth_failed, createTask.exception?.message),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                 }
             }
         }
