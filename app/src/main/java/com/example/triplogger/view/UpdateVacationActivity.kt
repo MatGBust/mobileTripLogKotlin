@@ -25,6 +25,7 @@ class UpdateVacationActivity : BaseActivity() {
     private lateinit var dateEditText : EditText
     private lateinit var notesEditText : EditText
     private lateinit var updateButton : Button
+    private lateinit var currentVacation: Vacation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,9 @@ class UpdateVacationActivity : BaseActivity() {
         // Check if the vacationId is valid
         vacationId?.let { id ->
             vacationViewModel.getVacationById(id).observe(this, Observer { vacation ->
-                vacation?.let { setEditTexts(it) } ?: Log.e(TAG, "Vacation not found with ID: $id")
+                vacation?.let {
+                    currentVacation = it
+                    setEditTexts(it) } ?: Log.e(TAG, "Vacation not found with ID: $id")
             })
         }
 
@@ -60,8 +63,7 @@ class UpdateVacationActivity : BaseActivity() {
         }
 
         updateButton.setOnClickListener {
-            val updatedVacation = Vacation(
-                id = vacationId,
+            val updatedVacation = currentVacation.copy( // Use the existing vacation and copy only the updated fields
                 title = titleEditText.text.toString(),
                 description = descriptionEditText.text.toString(),
                 location = locationEditText.text.toString(),
