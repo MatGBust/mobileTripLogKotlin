@@ -115,6 +115,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:18.0.0")
 
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
     testImplementation("io.mockk:mockk:1.13.2")
     testImplementation("org.mockito:mockito-inline:4.8.0")
     testImplementation ("org.mockito:mockito-core:4.8.0")
