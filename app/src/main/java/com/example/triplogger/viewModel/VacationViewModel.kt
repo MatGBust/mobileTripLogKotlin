@@ -7,10 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import com.example.triplogger.model.Vacation
 import com.example.triplogger.model.VacationRepository
 import com.example.triplogger.utilities.NoNetworkException
+import com.google.firebase.database.FirebaseDatabase
 
 class VacationViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: VacationRepository = VacationRepository(application)
+    var repository: VacationRepository = VacationRepository(application)
     val allVacations: LiveData<List<Vacation>> = repository.allVacations
 
     // LiveData to expose network error messages

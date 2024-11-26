@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -113,7 +114,18 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.12.0")
     implementation("com.google.android.gms:play-services-location:18.0.0")
 
-
-
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.2")
+    testImplementation("org.mockito:mockito-inline:4.8.0")
+    testImplementation ("org.mockito:mockito-core:4.8.0")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("org.robolectric:robolectric:4.9")
+    testImplementation ("org.robolectric:shadows-framework:4.10.3")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+    androidTestImplementation ("androidx.arch.core:core-testing:2.1.0")
 
 }

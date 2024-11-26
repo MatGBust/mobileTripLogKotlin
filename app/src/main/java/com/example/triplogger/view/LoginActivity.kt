@@ -25,7 +25,7 @@ class LoginActivity : BaseActivity() {
         promptForLanguageIfNeeded()
     }
 
-    override fun onResume() {
+    public override fun onResume() {
         super.onResume()
         if (!isNetworkAvailable(this)) {
             showNoConnectionDialog()
